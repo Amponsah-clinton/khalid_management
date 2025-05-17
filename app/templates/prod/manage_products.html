@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+<h4 class="text-center">Manage Products</h4>
+
+{% if messages %}
+  <div class="alert alert-success">
+    {% for message in messages %}
+      <p>{{ message }}</p>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<!-- Product List -->
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Unit Price</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in products %}
+      <tr>
+        <td>{{ product.item }}</td>
+        <td>{{ product.unit_price|intcomma }}</td>
+       <!-- Modify the Edit Button in manage_products.html -->
+<td>
+  <!-- Edit Button -->
+  <a href="{% url 'edit_product' product.id %}" class="btn btn-warning btn-sm">Edit</a>
+
+  <!-- Delete Form -->
+  <form method="POST" style="display:inline;">
+    {% csrf_token %}
+    <input type="hidden" name="product_id" value="{{ product.id }}">
+    <button type="submit" name="delete_product" class="btn btn-danger btn-sm">Delete</button>
+  </form>
+</td>
+
+      </tr>
+
+      <!-- Edit Modal -->
+     
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2 class="text-center">Add Product</h2>
+
+  <div class="container d-flex justify-content-center">
+    <div class="w-100" style="max-width: 500px;">
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary w-100">Add Product</button>
+      </form>
+      <a href="{% url 'manage_products' %}" class="d-block text-center mt-3">Back to Product Management</a>
+    </div>
+  </div>
+
+{% endblock %}

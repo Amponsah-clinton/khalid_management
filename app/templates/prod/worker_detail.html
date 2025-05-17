@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load humanize %}
+
+<div class="container mt-4">
+    <h4 class="mb-4">{{ worker.name }} – Daily Work Summary</h4>
+
+    <p><strong>Total Earnings:</strong> GHS {{ total_earnings|floatformat:2 }}</p>
+
+    {% if grouped_records %}
+        {% for date, records in grouped_records.items %}
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-white">
+                    Work for {{ date|date:"F j, Y" }}
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped table-bordered mb-0">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Unit Price (GHS)</th>
+                                <th>Amount Due (GHS)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in records %}
+                                <tr>
+                                    <td>{{ record.product.item }}</td>
+                                    <td>{{ record.quantity }}</td>
+                                    <td>{{ record.product.unit_price }}</td>
+                                    <td>GHS {{ record.amount_due|floatformat:2 |intcomma}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No work records found for this worker.</p>
+    {% endif %}
+
+    <a href="{% url 'manage_workers' %}" class="btn btn-secondary">Back</a>
+</div>
+{% endblock %}

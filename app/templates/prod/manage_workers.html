@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <style>
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h4 {
+      color: black;
+    }
+
+    .form-group {
+      width: 100%;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table th, table td {
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    table th:first-child,
+    table td:first-child {
+      position: sticky;
+      left: 0;
+      background: white;
+      z-index: 1;
+    }
+
+    .modal-content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Responsive modal for small screens */
+    @media (max-width: 576px) {
+      .modal-dialog {
+        max-width: 100%;
+        margin: 0;
+      }
+
+      .modal-content {
+        height: 100vh;
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+
+<h4 class="text-center">Manage Workers</h4>
+
+{% if messages %}
+  <div class="alert alert-success" id="success-message">
+    {% for message in messages %}
+      <p>{{ message }}</p>
+    {% endfor %}
+  </div>
+{% endif %}
+
+
+<div class="container-fluid table-responsive p-0">
+  <table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>Name</th>
+        <th>Group</th>
+        <th>Phone</th>
+        <th>Ghana card</th>
+        <th>Email</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+   <tbody>
+  {% for worker in workers %}
+    <tr>
+      <td> <a href="{% url 'worker_detail' pk=worker.pk %}">{{ worker.name }}</a></td>
+      <td>{{ worker.groups }}</td>
+      <td>{{ worker.phone }}</td>
+      <td>{{ worker.gh_card }}</td>
+      <td>{{ worker.email }}</td>
+      <td>
+        <!-- Large screen: show full buttons -->
+        <div class="d-none d-sm-inline">
+          <a href="{% url 'edit_worker' worker.id %}" class="btn btn-warning btn-sm">
+            <i class="fas fa-edit"></i> Edit
+          </a>
+          <form method="POST" style="display:inline;">
+            {% csrf_token %}
+            <input type="hidden" name="worker_id" value="{{ worker.id }}">
+            <button type="submit" name="delete_worker" class="btn btn-danger btn-sm">
+              <i class="fas fa-trash-alt"></i> Delete
+            </button>
+          </form>
+        </div>
+
+        <!-- Small screen: show icons only -->
+        <div class="d-inline d-sm-none">
+          <a href="{% url 'edit_worker' worker.id %}" class="btn btn-warning btn-sm" title="Edit">
+            <i class="fas fa-edit"></i>
+          </a>
+          <form method="POST" style="display:inline;">
+            {% csrf_token %}
+            <input type="hidden" name="worker_id" value="{{ worker.id }}">
+            <button type="submit" name="delete_worker" class="btn btn-danger btn-sm" title="Delete">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </form>
+        </div>
+      </td>
+    </tr>
+  {% endfor %}
+</tbody>
+
+  </table>
+</div>
+
+{% endblock %}

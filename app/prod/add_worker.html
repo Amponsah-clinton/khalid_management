@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<h2 class="text-center">Add Worker</h2>
+
+<div class="container d-flex justify-content-center">
+  <div class="w-100" style="max-width: 500px;">
+    
+    <!-- Display Success Message if Available -->
+    {% if messages %}
+      <div class="alert alert-success" id="success-message">
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      
+      <div class="form-group mb-3">
+        <label for="{{ form.name.id_for_label }}" class="form-label">
+          <i class="fa fa-user"></i> Name
+        </label>
+        {{ form.name }}
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="{{ form.phone.id_for_label }}" class="form-label">
+          <i class="fa fa-phone"></i> Phone
+        </label>
+        {{ form.phone }}
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="{{ form.gh_card.id_for_label }}" class="form-label">
+          <i class="fa fa-id-card"></i> Ghana Card Number
+        </label>
+        {{ form.gh_card }}
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="{{ form.email.id_for_label }}" class="form-label">
+          <i class="fa fa-envelope"></i> Email
+        </label>
+        {{ form.email }}
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="{{ form.profile_picture.id_for_label }}" class="form-label">
+          <i class="fa fa-image"></i> Profile Picture
+        </label>
+        {{ form.profile_picture }}
+      </div>
+
+      <button type="submit" class="btn btn-outline-primary w-100">Add Worker</button>
+    </form>
+
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    setTimeout(function() {
+      $('#success-message').fadeOut('slow');
+    }, 6000);  
+  });
+</script>
+
+{% endblock %}

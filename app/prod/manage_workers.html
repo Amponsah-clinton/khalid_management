@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <style>
+    .container {
+      max-width: 800px; 
+      margin: 0 auto;
+    }
+
+    h4{
+        color: black;
+    }
+
+    .form-group {
+      width: 100%;
+    }
+
+    .form-control {
+      width: 100%; 
+    }
+
+    table {
+      width: 100%; 
+      table-layout: fixed;
+    }
+
+    table th, table td {
+      text-align: center; 
+    }
+
+    .modal-content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+
+    .form-control {
+      padding: 10px;
+    }
+  </style>
+</head>
+
+<h2 class="text-center">Manage Workers</h2>
+
+{% if messages %}
+  <div class="alert alert-success" id="success-message">
+    {% for message in messages %}
+      <p>{{ message }}</p>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<h4>Add New Worker</h4>
+<div class="container">
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ add_form.as_p }}
+    <button type="submit" name="add_worker" class="btn btn-primary w-100">Add Worker</button>
+  </form>
+</div>
+<hr>
+
+<h4 style="padding-top: 50px;">Worker List</h4>
+<div class="container">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for worker in workers %}
+        <tr>
+          <td>{{ worker.name }}</td>
+          <td>{{ worker.phone }}</td>
+          <td>{{ worker.email }}</td>
+          <td>
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editModal{{ worker.id }}">
+              Edit
+            </button>
+
+            <form method="POST" style="display:inline;">
+              {% csrf_token %}
+              <input type="hidden" name="worker_id" value="{{ worker.id }}">
+              <button type="submit" name="delete_worker" class="btn btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+
+        <div class="modal fade" id="editModal{{ worker.id }}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel{{ worker.id }}" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel{{ worker.id }}">Edit Worker</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="worker_id" value="{{ worker.id }}">
+                {{ add_form.as_p }}
+                <button type="submit" name="edit_worker" class="btn btn-primary w-100">Save Changes</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

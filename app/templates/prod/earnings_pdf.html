@@ -1,0 +1,32 @@
+<h2>Earnings Report</h2>
+
+{% for month, groups in grouped_output.items %}
+  <h3>{{ month|date:"F Y" }}</h3>
+
+  {% for group_name, group_info in groups.items %}
+    <h4>Group: {{ group_name }}</h4>
+    <p>Total Earnings: {{ group_info.total_group_earnings }}</p>
+    <p>Leader Bonus: {{ group_info.leader_bonus }}</p>
+
+    <table border="1" cellspacing="0" cellpadding="4">
+      <thead>
+        <tr>
+          <th>Worker Name</th>
+          <th>Base Amount</th>
+          <th>Final Amount</th>
+          <th>Bonus</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for worker in group_info.workers %}
+        <tr>
+          <td>{{ worker.worker.name }}</td>
+          <td>{{ worker.base_amount }}</td>
+          <td>{{ worker.final_amount }}</td>
+          <td>{{ worker.bonus }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endfor %}
+{% endfor %}
